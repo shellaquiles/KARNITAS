@@ -44,6 +44,7 @@ El directorio `.agents/` concentra reglas, memoria, governance y especificacione
 KARNITAS/
 ├── README.md                 # Este documento (estándar)
 ├── CONTRIBUTING.md
+├── CHANGELOG.md
 ├── LICENSE
 ├── archetype/                # Bootstrap para proyectos nuevos
 │   ├── .agents/              # SSOT del proyecto
