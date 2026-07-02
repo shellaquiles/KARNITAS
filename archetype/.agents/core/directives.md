@@ -10,7 +10,7 @@ Rutas relativas a `.agents/` salvo `AGENTS.md`.
 
 Flujo: `core/` (fase 0) → `specs/NNN/spec.md` → clarify → `plan.md` → `tasks.md` → implement → iterate.
 
-Detalle en `knowledge/sdd.md`. Cambios post-merge empiezan por la spec.
+Detalle en `knowledge/sdd.md`. Todo cambio de comportamiento empieza por la spec.
 
 ## Commits
 

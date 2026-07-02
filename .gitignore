@@ -1,23 +1,2 @@
-# KARNITAS runtime — nunca versionar
-.agents/runtime/logs/*
-!.agents/runtime/logs/.gitkeep
-
-# Entorno local
-.env
-.env.*
-!.env.example
-
-# OS / IDE
-.DS_Store
-Thumbs.db
-.idea/
-*.swp
-*.swo
-
-# Dependencias (si el proyecto las usa)
-node_modules/
-__pycache__/
-*.pyc
-.venv/
-dist/
-build/
+# KARNITAS runtime — no versionar
+.agents/runtime/logs/

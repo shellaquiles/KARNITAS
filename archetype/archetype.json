@@ -1,5 +1,4 @@
 {
   "id": "karnitas-sdd",
-  "version": "1.0.1",
   "entrypoint": ".agents/index.json"
 }

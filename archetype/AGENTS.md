@@ -1,8 +1,8 @@
 # AGENTS.md
 
-1. Leer `.agents/index.json`
-2. Cargar `core/constraints.md` + `core/directives.md`
-3. Feature activa: `.agents/specs/<id>/spec.md`
-4. SDD: `.agents/knowledge/sdd.md` solo si trabajas en una feature
+1. `.agents/index.json`
+2. `core/constraints.md` + `core/directives.md`
+3. Feature activa: `specs/<id>/spec.md`
+4. SDD: `knowledge/sdd.md` (solo con feature en curso)
 
-Sin contexto → detenerse.
+Sin contexto en `.agents/` → detenerse.
