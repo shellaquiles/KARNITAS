@@ -1,0 +1,16 @@
+{
+  "version": "1.1.0",
+  "project": "nombre-del-proyecto",
+  "root": ".agents/",
+  "always_load": ["core/constraints.md", "core/directives.md"],
+  "context_map": {
+    "sdd": ["knowledge/sdd.md"],
+    "feature": ["specs/{id}/"],
+    "governance": ["governance/"],
+    "memory": ["memory/"]
+  },
+  "sdd": {
+    "templates": "specs/_templates/",
+    "phases": ["constitution", "specify", "clarify", "plan", "tasks", "implement", "iterate"]
+  }
+}
