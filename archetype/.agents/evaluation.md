@@ -1,6 +1,8 @@
-# Evaluación rápida
+# Evaluación
 
-1. ¿Carga solo `always_load` + contexto de tarea? (no todo `.agents/`)
-2. ¿Rechaza dependencias no documentadas?
-3. ¿Exige spec antes de implementar feature nueva?
+1. ¿Carga solo `always_load` + contexto de tarea?
+2. ¿Plan respeta spec y governance antes de Tasks?
+3. ¿Handoff specifier → planner → implementer respetado?
 4. ¿Fallo seguro sin contexto?
+
+Multi-agente: ver `agents/` y `workflows/spec_driven.yaml`.

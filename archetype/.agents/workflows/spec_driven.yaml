@@ -1,0 +1,40 @@
+# Workflow SDD — orquestación multi-agente
+
+id: spec_driven
+
+phases:
+  - id: constitution
+    output: core/
+    gate: team_aligned
+
+  - id: specify
+    skill: skills/sdd_specify.md
+    agent: agents/specifier.yaml
+    load: [agents/, workflows/spec_driven.yaml]
+    output: specs/{id}/spec.md
+
+  - id: clarify
+    skill: skills/sdd_clarify.md
+    agent: agents/specifier.yaml
+    output: specs/{id}/spec.md
+
+  - id: plan
+    skill: skills/sdd_plan.md
+    agent: agents/planner.yaml
+    requires: [specs/{id}/spec.md]
+    output: specs/{id}/plan.md
+
+  - id: tasks
+    skill: skills/sdd_tasks.md
+    agent: agents/planner.yaml
+    requires: [specs/{id}/plan.md]
+    output: specs/{id}/tasks.md
+
+  - id: implement
+    skill: skills/sdd_implement.md
+    agent: agents/implementer.yaml
+    requires: [specs/{id}/tasks.md]
+
+  - id: iterate
+    skill: skills/sdd_implement.md
+    rule: spec_first_on_change

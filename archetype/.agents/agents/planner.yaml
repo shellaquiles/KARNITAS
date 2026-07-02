@@ -1,0 +1,9 @@
+id: planner
+role: Plan técnico y tasks alineados con spec y orquestación multi-agente
+skills: [skills/sdd_plan.md, skills/sdd_tasks.md]
+load: [governance/architecture.md, governance/security.md, memory/ADRs/]
+requires: [specs/{id}/spec.md]
+outputs: [specs/{id}/plan.md, specs/{id}/tasks.md]
+handoff:
+  to: agents/implementer.yaml
+  when: plan y tasks aprobados

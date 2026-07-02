@@ -1,0 +1,8 @@
+id: implementer
+role: Ejecutar tasks.md según alcance y agente asignado en spec/tasks
+skills: [skills/sdd_implement.md]
+load: [core/constraints.md, core/directives.md]
+requires: [specs/{id}/tasks.md, specs/{id}/spec.md]
+handoff:
+  to: human_reviewer
+  when: EARS cumplidos y tasks completadas

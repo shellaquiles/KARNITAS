@@ -2,53 +2,45 @@
 
 La spec es el artefacto primario. Código y tests se derivan de ella. Todo vive en `.agents/`.
 
+Orquestación: `workflows/spec_driven.yaml` · Skills por fase en `skills/` · Roles en `agents/`
+
 ## Fases
 
-| # | Fase | Output | Gate |
-|---|------|--------|------|
-| 0 | Constitution | `core/` completo | Equipo alineado |
-| 1 | Specify | `specs/NNN/spec.md` | Revisar spec |
-| 2 | Clarify | spec sin ambigüedades | Sin bloqueos abiertos |
-| 3 | Plan | `plan.md` | Revisar arquitectura |
-| 4 | Tasks | `tasks.md` (1–4h/tarea) | Orden lógico |
-| 5 | Implement | código + tests | Tests + EARS OK |
-| 6 | Iterate | spec actualizada primero | Revisión humana |
+| # | Fase | Skill | Agente | Output |
+|---|------|-------|--------|--------|
+| 0 | Constitution | — | — | `core/` |
+| 1 | Specify | `sdd_specify.md` | specifier | `spec.md` |
+| 2 | Clarify | `sdd_clarify.md` | specifier | `spec.md` |
+| 3 | Plan | `sdd_plan.md` | planner | `plan.md` |
+| 4 | Tasks | `sdd_tasks.md` | planner | `tasks.md` |
+| 5 | Implement | `sdd_implement.md` | implementer | código + tests |
+| 6 | Iterate | `sdd_implement.md` | implementer | spec actualizada |
 
-Plantillas: `specs/_templates/`
+Plantillas: `specs/_templates/` — la spec incluye sección **Orquestación multi-agente**.
 
-## EARS (criterios de aceptación)
+## EARS
 
-Un criterio = una afirmación testeable. Patrones:
+Un criterio = una afirmación testeable:
 
-- **Ubiquitous:** El sistema shall [comportamiento permanente].
-- **Event:** WHEN [evento] THE sistema SHALL [respuesta].
-- **State:** WHILE [estado] THE sistema SHALL [comportamiento].
-- **Unwanted:** IF [condición] THEN THE sistema SHALL [respuesta].
-- **Optional:** WHERE [feature] THE sistema SHALL [comportamiento].
+- **Ubiquitous:** El sistema shall …
+- **Event:** WHEN … THE sistema SHALL …
+- **State:** WHILE … THE sistema SHALL …
+- **Unwanted:** IF … THEN THE sistema SHALL …
+- **Optional:** WHERE … THE sistema SHALL …
 
-Mapear cada criterio a un test en la spec (tabla EARS → test).
+Mapear cada criterio a un test en la spec.
 
-## Por fase (qué hace el agente)
+## Plan (fase 3)
 
-**Specify** — Crear `specs/NNN-nombre/` desde plantilla. User stories, RF, NFR, EARS, fuera de alcance. Sin código.
-
-**Clarify** — Detectar vaguedad y edge cases. Preguntar al humano. Actualizar spec.
-
-**Plan** — Arquitectura, decisiones, riesgos. Alineado con `governance/` y ADRs. Sin contradecir spec.
-
-**Tasks** — Tareas atómicas (1–4h, un PR razonable). ID, done, enlace a criterio EARS. Marcar `[P]` si paralelo.
-
-**Implement** — Una tarea a la vez. Tests por criterio EARS. Marcar `[x]` en tasks.md.
-
-**Iterate** — Cualquier cambio de comportamiento: spec primero, luego plan/tasks/código.
+Ver `skills/sdd_plan.md`. Respeta la orquestación definida en la spec.
 
 ## DoD (PR)
 
-- Spec actualizada si cambia comportamiento
+- Spec/plan/tasks alineados; orquestación multi-agente respetada
 - Tests cubren EARS afectados
 - `refs specs/NNN/spec.md` en commit
 - ADR si arquitectura; `governance/` si dependencia nueva
 
 ## Evitar
 
-Over-spec (implementación en spec), under-spec (sin EARS), tareas >4h, merge sin revisión humana.
+Over-spec, under-spec, tareas >4h, merge sin revisión humana.

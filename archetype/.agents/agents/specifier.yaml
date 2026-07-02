@@ -1,0 +1,8 @@
+id: specifier
+role: Especificar y clarificar features (incl. orquestación multi-agente en spec)
+skills: [skills/sdd_specify.md, skills/sdd_clarify.md]
+load: [knowledge/sdd.md, agents/, workflows/spec_driven.yaml]
+outputs: [specs/{id}/spec.md]
+handoff:
+  to: agents/planner.yaml
+  when: spec aprobada y sección Orquestación multi-agente completa
