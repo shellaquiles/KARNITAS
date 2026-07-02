@@ -1,0 +1,20 @@
+---
+description: KARNITAS — routing a .agents/ (SSOT). No duplicar skills aquí.
+alwaysApply: true
+---
+
+# KARNITAS
+
+Seguir el protocolo **READ → LOAD → VALIDATE → RECALL → EXECUTE** (`README` del estándar).
+
+1. Leer `.agents/index.json` al inicio de tareas no triviales.
+2. **Siempre cargar:** `.agents/core/constraints.md`, `.agents/core/directives.md`.
+3. **Feature activa:** `.agents/specs/<id>/spec.md` (+ plan/tasks si existen).
+4. **SDD por fase** — cargar skill desde `index.json` → `sdd.skills`:
+   - Specify/Clarify → `context_map.sdd_specify` (skills + `agents/`)
+   - Plan/Tasks → `skills/sdd_plan.md`, `skills/sdd_tasks.md`
+   - Implement → `skills/sdd_implement.md`
+5. **Orquestación:** `workflows/spec_driven.yaml`, roles en `agents/`.
+6. **Sin contexto** en `.agents/` para stack, arquitectura o decisiones → detenerse y preguntar.
+
+Entrypoint común: `AGENTS.md` en la raíz del repo.
