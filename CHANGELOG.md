@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 2026-07-02
+## [1.0.1] - 2026-07-02
 
 ### Added
 
@@ -14,11 +14,6 @@
 
 - SDD y KARNITAS comparten `.agents/` como única fuente de verdad
 - README reescrito con estructura del repo y guía de inicio
-
-### Removed
-
-- Duplicación de skills, workflows y documentación redundante
-- Árbol `.agents/` separado en raíz del repo estándar
 
 ## [1.0.0] - 2026
 

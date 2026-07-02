@@ -6,7 +6,7 @@ Estándar abierto para gestión de contexto, memoria y automatización de agente
 
 | Campo | Valor |
 |-------|-------|
-| **Versión** | 1.1.0 |
+| **Versión** | 1.0.1 |
 | **Estado** | RFC — Request for Comments |
 | **Licencia** | MIT |
 | **Compatibilidad** | Agnóstico: cualquier IDE, agente o LLM |
@@ -153,4 +153,4 @@ Ver [CONTRIBUTING.md](CONTRIBUTING.md). Issues y PRs bienvenidos.
 
 > KARNITAS no te dice cómo programar. Te ayuda a que todos — humanos y agentes — trabajen con el mismo contexto.
 
-_MIT License · v1.1.0_
+_MIT License · v1.0.1_
