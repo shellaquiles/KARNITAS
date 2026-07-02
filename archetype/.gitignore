@@ -1,0 +1,7 @@
+.agents/runtime/logs/
+.env
+.env.*
+node_modules/
+__pycache__/
+.venv/
+dist/
