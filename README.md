@@ -6,7 +6,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Versión** | 1.0.1 |
+| **Versión** | 1.0.2 |
 | **Estado** | RFC — Request for Comments |
 | **Licencia** | MIT |
 | **Audiencia** | Desarrollo, DevOps, Data, diseño y cualquier rol que use agentes de IA |
