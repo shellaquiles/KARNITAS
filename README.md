@@ -6,7 +6,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Versión** | 1.0.1 |
+| **Versión** | 1.0.2 |
 | **Estado** | RFC — Request for Comments |
 | **Licencia** | MIT |
 | **Audiencia** | Desarrollo, DevOps, Data, diseño y cualquier rol que use agentes de IA |
@@ -114,33 +114,53 @@ Funciona con cualquier IDE, agente, LLM, lenguaje y stack. Sin dependencias prop
 
 Se añade `.agents/` a la raíz del repositorio del **proyecto** (no hace falta implementar todo el primer día; ver [adopción gradual](#10-adopción-gradual)).
 
-### Estructura del arquetipo (nivel 4)
+### Estructura del arquetipo (nivel 5 — multi-agente)
 
 Incluida en [`archetype/`](archetype/):
 
 ```
 .agents/
-├── index.json              # Punto de entrada — leer primero
+├── index.json
 ├── core/
-│   ├── constraints.md      # Stack, prohibiciones (always_load)
-│   └── directives.md       # Protocolo (always_load)
+│   ├── constraints.md      # always_load
+│   └── directives.md       # always_load
 ├── knowledge/
-│   ├── sdd.md              # SDD + EARS + fases
-│   └── domain.md           # Dominio y reglas de negocio
+│   ├── sdd.md
+│   └── domain.md
 ├── governance/
 │   ├── architecture.md
 │   └── security.md
-├── specs/
-│   └── _templates/         # spec.md, plan.md, tasks.md
+├── specs/_templates/       # spec.md, plan.md, tasks.md
+├── skills/                   # sdd_specify … sdd_implement
+├── workflows/
+│   └── spec_driven.yaml
+├── agents/                   # specifier → planner → implementer
+├── tools/
+│   ├── mcp_servers.json
+│   └── openapi_specs/
 ├── memory/
 │   ├── ADRs/
 │   └── known_issues.md
 └── evaluation.md
+
+adapters/                     # entrypoints delgados por IDE (no duplicar skills)
+├── cursor/rules/karnitas.mdc
+├── copilot/copilot-instructions.md
+├── claude/CLAUDE.md
+├── aider/.aider.conf.yml
+└── continue/config.json
 ```
 
-### Extensiones opcionales (nivel 5)
+Skills y procesos SDD viven **solo** en `.agents/skills/`. Los adaptadores enrutan hacia ahí.
 
-Según madurez del equipo: `skills/`, `workflows/`, `tools/` (MCP, OpenAPI), `agents/` (multi-agente).
+### Componentes adicionales (nivel 5)
+
+| Ruta | Responsabilidad |
+|------|-----------------|
+| `skills/` | Instrucciones por fase SDD (macros del agente) |
+| `workflows/` | Orquestación multi-paso (`spec_driven.yaml`) |
+| `agents/` | Roles, handoffs y skills asignados |
+| `tools/` | MCP y contratos OpenAPI disponibles |
 
 ### `index.json`
 
@@ -148,21 +168,25 @@ Todo agente compatible lee este archivo primero. Define:
 
 - **`always_load`** — Contexto mínimo en cada sesión (en el arquetipo: 2 archivos en `core/`)
 - **`context_map`** — Qué cargar según el tipo de tarea (`sdd`, `governance`, `memory`…)
-- **`sdd`** — Rutas de plantillas y fases del flujo spec-driven
+- **`sdd.skills`** — Skill por fase (especialmente `sdd_plan.md` en fase Plan)
+- **`agents.registry`** — Roles multi-agente
 
-Ejemplo (arquetipo):
+Ejemplo (arquetipo, nivel 5):
 
 ```json
 {
   "schema": "karnitas/1",
-  "project": "nombre-del-proyecto",
-  "root": ".agents/",
+  "maturity": 5,
   "always_load": ["core/constraints.md", "core/directives.md"],
   "context_map": {
-    "sdd": ["knowledge/sdd.md"],
-    "feature": ["specs/{id}/"],
-    "governance": ["governance/"],
-    "memory": ["memory/"]
+    "sdd": ["knowledge/sdd.md", "workflows/spec_driven.yaml"],
+    "sdd_plan": ["skills/sdd_plan.md", "governance/architecture.md"],
+    "multi_agent": ["agents/"],
+    "tools": ["tools/mcp_servers.json"]
+  },
+  "sdd": {
+    "workflow": "workflows/spec_driven.yaml",
+    "skills": { "plan": "skills/sdd_plan.md" }
   }
 }
 ```
@@ -176,8 +200,12 @@ Ejemplo (arquetipo):
 | `knowledge/` | Dominio del proyecto y guía SDD |
 | `governance/` | Arquitectura, seguridad, estándares |
 | `specs/` | Especificaciones SDD por feature |
+| `skills/` | Instrucciones reutilizables por fase |
+| `workflows/` | Orquestación SDD multi-agente |
+| `agents/` | Roles y handoffs entre agentes |
+| `tools/` | MCP y OpenAPI |
 | `memory/` | ADRs y errores ya resueltos |
-| `evaluation/` | Cómo validar que el agente respeta las reglas |
+| `evaluation.md` | Validación de cumplimiento |
 
 ---
 
@@ -191,15 +219,17 @@ Ejemplo (arquetipo):
 Constitution → Specify → Clarify → Plan → Tasks → Implement → Iterate
 ```
 
-| Fase | Output | Checkpoint humano |
-|------|--------|-------------------|
-| 0 Constitution | `core/` completo | Equipo alineado en reglas |
-| 1 Specify | `specs/NNN/spec.md` | Revisar spec |
-| 2 Clarify | spec sin ambigüedades | Sin bloqueos abiertos |
-| 3 Plan | `plan.md` | Revisar arquitectura |
-| 4 Tasks | `tasks.md` (1–4h/tarea) | Orden lógico |
-| 5 Implement | código + tests | Criterios EARS cumplidos |
-| 6 Iterate | spec actualizada primero | Revisión humana |
+| Fase | Output | Skill / Agente | Checkpoint |
+|------|--------|----------------|------------|
+| 0 Constitution | `core/` | — | Equipo alineado |
+| 1 Specify | `spec.md` | `sdd_specify` / specifier | Revisar spec |
+| 2 Clarify | `spec.md` | `sdd_clarify` / specifier | Sin bloqueos |
+| 3 Plan | `plan.md` | `sdd_plan` / planner | Revisar arquitectura |
+| 4 Tasks | `tasks.md` | `sdd_tasks` / planner | Orden lógico |
+| 5 Implement | código + tests | `sdd_implement` / implementer | EARS OK |
+| 6 Iterate | spec actualizada | implementer | Revisión humana |
+
+Fase **Plan**: traduce spec → arquitectura, decisiones y riesgos. Ver [`skills/sdd_plan.md`](archetype/.agents/skills/sdd_plan.md).
 
 ### EARS (criterios de aceptación)
 
@@ -253,13 +283,21 @@ Entrada rápida para herramientas: [`archetype/AGENTS.md`](archetype/AGENTS.md) 
 
 ### Integración por herramienta
 
-| Herramienta | Cómo |
-|-------------|------|
-| **Cursor** | `AGENTS.md` + reglas que apunten a `.agents/core/` |
-| **Copilot** | `copilot-instructions.md` → `.agents/` |
-| **Claude Code / Projects** | Cargar `core/` como instrucciones |
-| **Aider** | `--read .agents/core/constraints.md` |
-| **Continue / Cody** | `.agents/` como contexto adicional |
+Plantillas en [`archetype/adapters/`](archetype/adapters/). Instalar con:
+
+```bash
+./scripts/init-karnitas.sh . --adapter cursor   # o copilot | claude | aider | continue | all | none
+```
+
+| Herramienta | Adaptador (destino) |
+|-------------|---------------------|
+| **Cursor** | `adapters/cursor/` → `.cursor/rules/karnitas.mdc` |
+| **Copilot** | `adapters/copilot/` → `copilot-instructions.md` |
+| **Claude Code / Projects** | `adapters/claude/` → `CLAUDE.md` |
+| **Aider** | `adapters/aider/` → `.aider.conf.yml` |
+| **Continue** | `adapters/continue/` → `.continue/config.json` |
+
+Todas las herramientas: `AGENTS.md` + `.agents/index.json` como SSOT.
 
 ---
 
@@ -273,7 +311,7 @@ Entrada rápida para herramientas: [`archetype/AGENTS.md`](archetype/AGENTS.md) 
 | 4 | Contexto operativo | + `specs/` (SDD), `evaluation/` |
 | 5 | Multi-agente | + `skills/`, `workflows/`, `tools/`, `agents/` |
 
-El [arquetipo](archetype/) incluido en este repo cubre **nivel 4**.
+El [arquetipo](archetype/) incluido en este repo cubre **nivel 5 (multi-agente)**.
 
 ---
 
@@ -284,8 +322,8 @@ El [arquetipo](archetype/) incluido en este repo cubre **nivel 4**.
 | 1 Fundación | Día 1 | `init-karnitas.sh` → completar `core/constraints.md` |
 | 2 Contexto | Semana 1 | `governance/`, `memory/known_issues.md` |
 | 3 Conocimiento | Semana 2–4 | `knowledge/domain.md`, primeros ADRs |
-| 4 SDD | Cuando haya features | `specs/001-…/spec.md` con plantillas |
-| 5 Operaciones | Según necesidad | skills, workflows, multi-agente |
+| 4 SDD | Cuando haya features | `specs/001-…/spec.md` → `plan.md` → `tasks.md` |
+| 5 Multi-agente | Incluido en arquetipo | `skills/`, `workflows/`, `agents/`, `tools/` |
 
 ---
 
@@ -293,7 +331,7 @@ El [arquetipo](archetype/) incluido en este repo cubre **nivel 4**.
 
 KARNITAS usa Markdown y JSON — legible por humanos y máquinas, sin runtime obligatorio.
 
-Compatible con **Model Context Protocol (MCP)**: declarar servidores en `tools/mcp_servers.json` cuando el proyecto lo requiera (nivel 5).
+Compatible con **Model Context Protocol (MCP)**: declarar servidores en `tools/mcp_servers.json`.
 
 ---
 
@@ -305,15 +343,17 @@ Este repo contiene el **estándar** (este README) y el **arquetipo** (plantilla 
 |------|-----------|
 | `README.md` | Documentación del estándar KARNITAS |
 | `archetype/` | Plantilla copiada a tu proyecto |
-| `scripts/init-karnitas.sh` | Bootstrap |
+| `scripts/init-karnitas.sh` | Bootstrap del arquetipo ([guía](scripts/README.md)) |
 
 **No clones este repo como base de tu aplicación.** Genera tu proyecto con el script:
 
 ```bash
 git clone https://github.com/shellaquiles/KARNITAS.git
-./KARNITAS/scripts/init-karnitas.sh /ruta/a/mi-proyecto
+./KARNITAS/scripts/init-karnitas.sh /ruta/a/mi-proyecto --adapter all
 cd /ruta/a/mi-proyecto
 ```
+
+Solo un IDE: `--adapter cursor` | `copilot` | `claude` | `aider` | `continue`. Sin adaptadores: `--adapter none`.
 
 ### Primeros pasos en tu proyecto
 

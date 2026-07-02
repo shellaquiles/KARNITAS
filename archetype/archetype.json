@@ -1,4 +1,6 @@
 {
   "id": "karnitas-sdd",
-  "entrypoint": ".agents/index.json"
+  "maturity": 5,
+  "entrypoint": ".agents/index.json",
+  "adapters": "adapters/"
 }

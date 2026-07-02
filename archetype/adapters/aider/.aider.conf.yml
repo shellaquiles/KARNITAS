@@ -1,0 +1,14 @@
+# KARNITAS — contexto base para Aider
+# Ajustar --read según la feature activa (spec/plan/tasks)
+
+read:
+  - AGENTS.md
+  - .agents/index.json
+  - .agents/core/constraints.md
+  - .agents/core/directives.md
+
+# Ejemplo feature activa (descomentar y ajustar id):
+# read:
+#   - .agents/specs/001-nombre/spec.md
+#   - .agents/specs/001-nombre/plan.md
+#   - .agents/specs/001-nombre/tasks.md

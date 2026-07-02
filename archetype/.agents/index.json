@@ -1,16 +1,33 @@
 {
   "schema": "karnitas/1",
+  "maturity": 5,
   "project": "nombre-del-proyecto",
   "root": ".agents/",
   "always_load": ["core/constraints.md", "core/directives.md"],
   "context_map": {
-    "sdd": ["knowledge/sdd.md"],
+    "sdd": ["knowledge/sdd.md", "workflows/spec_driven.yaml"],
+    "sdd_specify": ["skills/sdd_specify.md", "agents/", "workflows/spec_driven.yaml"],
+    "sdd_plan": ["skills/sdd_plan.md", "governance/architecture.md", "memory/ADRs/"],
+    "multi_agent": ["agents/"],
+    "tools": ["tools/mcp_servers.json", "tools/openapi_specs/"],
     "feature": ["specs/{id}/"],
     "governance": ["governance/"],
     "memory": ["memory/"]
   },
   "sdd": {
+    "workflow": "workflows/spec_driven.yaml",
     "templates": "specs/_templates/",
-    "phases": ["constitution", "specify", "clarify", "plan", "tasks", "implement", "iterate"]
+    "phases": ["constitution", "specify", "clarify", "plan", "tasks", "implement", "iterate"],
+    "skills": {
+      "specify": "skills/sdd_specify.md",
+      "clarify": "skills/sdd_clarify.md",
+      "plan": "skills/sdd_plan.md",
+      "tasks": "skills/sdd_tasks.md",
+      "implement": "skills/sdd_implement.md"
+    }
+  },
+  "agents": {
+    "registry": "agents/",
+    "roles": ["specifier", "planner", "implementer"]
   }
 }

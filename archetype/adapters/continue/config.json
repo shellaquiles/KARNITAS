@@ -1,0 +1,9 @@
+{
+  "docs": [
+    { "title": "KARNITAS index", "path": ".agents/index.json" },
+    { "title": "Constraints", "path": ".agents/core/constraints.md" },
+    { "title": "Directives", "path": ".agents/core/directives.md" },
+    { "title": "SDD guide", "path": ".agents/knowledge/sdd.md" },
+    { "title": "AGENTS entrypoint", "path": "AGENTS.md" }
+  ]
+}
