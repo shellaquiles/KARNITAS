@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Archivos esenciales
+        run: |
+          test -f README.md
+          test -f LICENSE
+          test -d archetype/.agents
+
+      - name: Markdown sin tabs
+        run: |
+          ! grep -r $'\t' --include='*.md' . || { echo "tabs en markdown"; exit 1; }
